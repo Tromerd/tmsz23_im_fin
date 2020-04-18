@@ -26,9 +26,7 @@ SECRET_KEY = 'mt&r7jytjp(n5d=jsn8)clwbuwj(09x1sw^keecugiqz92u15&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-('alladar.pythonanywhere.com', )
-]
+ALLOWED_HOSTS = ['*']
 
 LOGIN_REDIRECT_URL = '/'
 
