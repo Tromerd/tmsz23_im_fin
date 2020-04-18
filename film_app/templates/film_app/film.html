@@ -1,0 +1,137 @@
+{% extends 'film_app/base.html' %}
+
+{% block title %} {{film.title}} details {% endblock %}
+
+{% block body %}
+
+   {% block content %}
+   <div class="container-fluid"style="margin-left:50px;margin-top:70px;width: 100rem;">
+      <h1>Title: {{ film.title }}</h1>
+      <p><strong>Poster:</strong>
+          <a href="/media{{ film.poster }}" download="{{film.title}}"><img src="/media{{film.poster}}"></a>
+      <p><strong>Description:</strong> {{film.description}}</p>
+      <p><strong>Year:</strong> {{film.year}}</p>
+      <p><strong>Duration:</strong> {{film.duration}}</p>
+      <p><strong>Genres:</strong> {{film.genres}}</p>
+      <p><strong>Kinogo link:</strong> <a href="{{film.url}}" target="_blank">{{film.url}}</a></p>
+   </div>
+   {% endblock %}
+
+
+    {% block screens %}
+         <h5 class="card-title" style="margin-left:50px;margin-top:60px">Screenshots</h5>
+         <div class="row">
+             {% for screen in screens %}
+                  <div class="col-sm-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <p><a href="/media{{screen}}"><p><img src="/media{{screen}}" style="max-width: 35rem"></p></a>
+                      </div>
+                    </div>
+                  </div>
+               {% endfor %}
+         </div>
+    {% endblock %}
+
+
+    {% block reviews %}
+        <h4 class="card-title" style="margin-left:50px;margin-top:80px">Reviews</h4>
+        <!-- TODO: implement ajax list update after new review is added-->
+            {%  for review in reviews %}
+                    <div class="card" style="margin-left:50px;width: 100rem;">
+                      <div class="card-body">
+                          <a href="{% url 'film_app:review' review.id %}">
+                        <h5 class="card-title">{{ review.title }} added {{review.date}} by {{review.user}}</h5>
+                          </a>
+                        <p class="card-text">{{ review.text}}</p>
+                          <!-- TODO: move Vue Like api with script in separate file and reuse it -->
+                        <a href="#" class="btn btn-primary">STUB: Like
+                            <!-- TODO: extend context with number of likes for each review in views -->
+                            <span class="badge badge-light">{{likes}} STUB: nLikes</span></a>
+                      </div>
+                    </div>
+           {% endfor %}
+
+
+        {% if user.is_authenticated %}
+        <div class="container-fluid">
+            <div class="row" style="margin-left:50px;margin-top:40px;width: 50rem;">
+            <h5 class="text">Add review by {{ user }}</h5>
+            <div id = "rapp" class="col-lg-12">
+                <label for ="title">Title</label>
+                <input id="title" class="form-control" type= "text" v-model = "review_object.title">
+
+                <label for="text">Text</label>
+                <textarea id="text" class="form-control"  rows="12" v-model = "review_object.text">
+                </textarea>
+
+                <button class="btn btn-info"  style="margin-top:20px;width: 10rem;"
+                        v-if="review_object.id === null" @click.prevent="save_review()">
+                    Add</button>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endblock %}
+
+
+
+    <script>
+    let template_review_object = {
+        id:null,
+        film:{{ film.id }},
+        user:{{ user.id }},
+        title:'',
+        // date:new Date().toLocaleDateString(),
+        date:new Date(),
+        text:null,
+        is_deleted:false
+    };
+
+    new Vue ({
+        el:'#rapp',
+        delimiters: ['[[', ']]'],
+        data: function () {
+            return {
+               // review_list:[],
+               review_object: this.copy_review(),
+            }
+        },
+        methods: {
+            copy_review:function(){
+                let review={};
+                for (let key in template_review_object){
+                    review[key]=template_review_object[key]
+                }
+                return  review
+            },
+            save_review: function(){
+                axios_instance.post('api/review/', this.review_object).then(response=>{
+                    if (response.status === 201){
+                        console.log(response.data);
+                        // this.review_list.push(response.data);
+                        this.review_object=this.copy_review();
+                        window.location.reload() // TODO: remove after implementing ajax update
+                    }
+                    else{
+                        alert('Something went wrong.')
+                    }
+                }) .catch(()=>{
+                    alert('BAD REQUEST');
+                    console.log(this.review_object)
+                })
+            },
+            insert_data_to_review_object:function(index){
+                // this.review_object=this.review_list[index]
+            },
+        },
+        mounted: function () {}
+    })
+    </script>
+
+{% endblock %}
+
+
+
+
+

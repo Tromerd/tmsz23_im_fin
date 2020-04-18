@@ -1,0 +1,29 @@
+{% extends 'film_app/base.html' %}
+
+{% block title %}
+All Reviews
+{% endblock %}
+
+{% block body %}
+    <div class="col-lg-12 text-center" style="margin-top: 35px;">
+        <h1 align="left">All Reviews</h1>
+    </div>
+
+    <div class="col-lg-12 mt-5">
+        <ul class="list-group">
+        {% for item in all_reviews %}
+            <li class="list-group-item">
+                 {{ forloop.counter }}
+                  <span class="badge badge-success badge-pill">STUB: nLikes {{likes_count }}</span>
+                  <a href="{% url 'film_app:review' item.id %}">{{ item }}</a>
+                  <span class="d-inline-block text-truncate"  style="max-width: 85vmax; flex-wrap:wrap;">
+                        {{ item.text }}
+                  </span>
+                  <!-- TODO: 1) add like button and like scrips over review item 2) add like counter over review -->
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% include 'film_app/pagination.html' with request=request page_obj=page_obj paginator=paginator %}
+    </div>
+{% endblock %}

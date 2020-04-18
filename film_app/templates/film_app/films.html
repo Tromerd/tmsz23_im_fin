@@ -1,0 +1,27 @@
+{% extends 'film_app/base.html' %}
+
+{% block title %}
+Films List
+{% endblock %}
+
+{% block body %}
+    <div class="col-lg-12 text-center">
+        <br><br><br>
+        <h1 align="left">Films from Kinogo</h1>
+    </div>
+    <div class="col-lg-12 mt-5">
+    <ul class="list-group">
+        {% for item in films %}
+            <li class="list-group-item">
+                {{ forloop.counter }}
+                <img src="/media{{ item.poster }}" style="max-width: 50px" alt="...">
+                <a href="{% url 'film_app:film' item.id %}">
+                     {{ item}}
+                </a>
+                <span class="text-secondary" >{{ item.genres }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    {% include 'film_app/pagination.html' with request=request page_obj=page_obj paginator=paginator %}
+    </div>
+{% endblock %}

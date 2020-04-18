@@ -1,0 +1,13 @@
+1) List of liked reviews is implemented in front (in template),
+   - but should be implemented in back (views, get_queryset or use table relations)
+2) Date formatting - in DB, API, UI
+3) Likes:
+ - no validations impl.: 1) do not like own reviews 2) do not like review twice and more
+ - Like button stays same after Like
+ - no delete like implemented
+ 4) Review Edit - from for editing is empty, so only replace is implemented
+ 5) Vue.js and bootstrap.js errors in console - not fixed
+ 6) Reverse for 'register' not found. 'register' is not a valid view function or pattern name.
+ 7) run parser from UI:
+  - fix 'attempted relative import beyond top-level package for parser import'
+  - add argparse to pass depth/page

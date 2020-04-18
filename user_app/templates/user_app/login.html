@@ -1,0 +1,36 @@
+{% extends 'film_app/base.html' %}
+{% load static %}
+{% block title %} Auth page{% endblock %}
+
+{% block body %}
+    <script scr = "{% static 'film_app/js/django_form.js' %}"></script>
+
+    <h3>Login Form</h3>
+
+    <div class="col-lg-12 offset-md-1">
+    {% if form.errors %}
+    <p> Login or pass is incorrect</p>
+    <p> Try to <a href="{% url 'user_app:register' %}">Register</a> or </p>
+    {% endif %}
+
+    <form id="login_form" method="post"
+          action="{% url 'user_app:login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><button id="sub_btn" name="submit" >Enter</button></p>
+
+        <input type="hidden" name="next" value={{ request.GET.next }}"">
+    </form>
+
+
+
+    <script type="text/javascript">
+        bootstrap_form('login_form');
+        document.getElementById('sub_btn').setAttribute('class', 'btn btn-info form-control mt-2');
+        let lbls = document.getElementsByName('label');
+        lbs[0].innerText = 'username'
+        lbls[1].innerText = 'password'
+    </script>
+
+    </div>
+{% endblock %}

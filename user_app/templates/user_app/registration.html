@@ -1,0 +1,22 @@
+{% extends "film_app/base.html" %}
+{% load static %}
+{% block body%}
+  <div class="container">
+
+      {% if registered %}
+        <h3>
+            <a href="{% url 'user_app:login' %}">Successful registration! - Login</a>
+        </h3>
+
+      {% else %}
+        <h3>Registration Form</h3>
+          <form enctype="multipart/form-data" method="POST">
+              {% csrf_token %}
+              {{ user_form.as_p }}
+              <input type="submit" name="" value="Register">
+          </form>
+      {% endif %}
+
+    </div>
+
+{% endblock %}
